@@ -1,12 +1,16 @@
 import ldap3 # https://ldap3.readthedocs.io/#
 import json
 """
-    alterRefreshTokens : Adds a new scope to all refresh tokens in the Core Token Service (CTS)
-    @param : server_uri : Server connection data
-    @param : bind_dn : Service account dn
-    @param : pw : Service account password
-    @param : new_scope : Scope to be added
-    @param : tokenOU : organisationalUnit where the tokens can be found
+    @function : alterRefreshTokens : Adds a new scope to all refresh tokens in the Core Token Service (CTS)
+    @param : String : server_uri : Server connection data ([protocol]://[server]:[port])
+    @param : String : bind_dn : Service account dn
+    @param : String : pw : Service account password
+    @param : String : new_scope : Scope to be added
+    @param : String : tokenOU : organisationalUnit where the tokens can be found
+    TODO : Manage a list of new scopes (List<String>)
+    TODO : Check that LDAPS/SSL connection works
+    TODO : Check that this stands for both embedded and external CTS
+    TODO : Remove spaces in JSON strings
 """
 def alterRefreshTokens(server_uri, bind_dn, pw, new_scope, tokenOU):
     # Creating a Server object
@@ -38,8 +42,8 @@ def alterRefreshTokens(server_uri, bind_dn, pw, new_scope, tokenOU):
                     # Adding the new scope to the JSON object
                     coreTokenObject_json['scope'].append(new_scope)
                     print("coreTokenObject_json['scope'] = "+ str(coreTokenObject_json['scope']))
-                    # Creting a new string to update the coreTokenObject
-                    new_coreTokenObject = json.dumps(coreTokenObject_json) #Bug : Remove spaces from the JSON
+                    # Creating a new string to update the coreTokenObject
+                    new_coreTokenObject = json.dumps(coreTokenObject_json) #TODO : Possible bug : Remove spaces from the JSON
                     # Creating a new string to update the coreTokenString01 from the coreTokenObject scopes
                     new_coreTokenString01 = ",".join(coreTokenObject_json['scope'])
                     print("new_coreTokenObject = "+new_coreTokenObject)
